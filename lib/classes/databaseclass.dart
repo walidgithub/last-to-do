@@ -16,7 +16,7 @@ class DatabaseF {
             'CREATE TABLE ToDoTasks (id INTEGER PRIMARY KEY, task TEXT, time TEXT, date TEXT, status TEXT, priority TEXT)')
             .catchError((error) => print("error${error.toString()}"));
       },onOpen: (database) {
-      getDb(database).then((value) => value = t1);
+      // getDb(database).then((value) => value = t1);
     }
     );
   }
@@ -32,9 +32,9 @@ class DatabaseF {
           .rawInsert(
           'INSERT INTO ToDoTasks(task, time, date, status, priority) VALUES("${task}", "${time}", "${date}", "${status}", "${priority}")')
           .then((value) => print('insert successfuly'));
-      getDb(database)
-          .then((value) => value = t1)
-          .catchError((error) => print("error${error.toString()}"));
+      // getDb(database)
+      //     .then((value) => value = t1)
+      //     .catchError((error) => print("error${error.toString()}"));
     });
   }
 
@@ -44,15 +44,15 @@ class DatabaseF {
     database?.rawUpdate('SELECT * FROM ToDoTasks where status= ?',['Task']);
   }
 
-  static Future<List<Map>> getDb(database) async {
-    return await database.rawQuery('SELECT * FROM ToDoTasks');
-  }
+  // static Future<List<Map>> getDb(database) async {
+  //   return await database.rawQuery('SELECT * FROM ToDoTasks');
+  // }
 
-  void updateData({
-    required String status,
-    required int id,
-  }) async {
-    database?.rawUpdate('update ToDoTasks set status=? where id=?',
-        ['$status', id]).then((value) => getDb(database));
-  }
+  // void updateData({
+  //   required String status,
+  //   required int id,
+  // }) async {
+  //   // database?.rawUpdate('update ToDoTasks set status=? where id=?',
+  //   //     ['$status', id]).then((value) => getDb(database));
+  // }
 }

@@ -150,14 +150,14 @@ class _AddTaskState extends State<AddTask> {
                             time: tasktimeController.text,
                             date: taskdateController.text,
                             status: 'Task',
-                            priority: taskpriorityController.text)
-                        .then(
-                            (value) => DatabaseF.getDb(DatabaseF.database).then((value) {
-                                  t1 = value;
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (_) => TaskHome()));
-                                }));
+                            priority: taskpriorityController.text);
+                        // .then(
+                        //     (value) => DatabaseF.getDb(DatabaseF.database).then((value) {
+                        //           t1 = value;
+                        //           Navigator.of(context).pushReplacement(
+                        //               MaterialPageRoute(
+                        //                   builder: (_) => TaskHome()));
+                        //         }));
                   }
                 },
                 child: Icon(

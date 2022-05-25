@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/classes/databaseclass.dart';
 import 'dart:math' as math;
 
 import 'package:todo_app/components/straightwave.dart';
 import 'package:todo_app/classes/tasksclass.dart';
+import 'package:todo_app/cubit/app_cubit.dart';
+
+import '../cubit/app_state.dart';
 
 class TaskImage extends StatelessWidget {
   @override
@@ -34,22 +38,24 @@ class TaskImage extends StatelessWidget {
               ),
               clipper: BottomWaveClipper(),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: ListView.builder(
-                itemCount: t1.length,
-                itemBuilder: (context, index) {
-                  return Todo(
-                    task: t1[index]['task'],
-                    time: t1[index]['time'],
-                    date: t1[index]['date'],
-                    status: t1[index]['status'],
-                    priority: t1[index]['priority'],
-                  );
-                },
-              ),
-            ),
+            BlocProvider(
+              create: (BuildContext context) => AppCubit(),
+              child: BlocConsumer<AppCubit, AppState>(
+                  listener: (BuildContext context, AppState state) {},
+                  builder: (BuildContext context, AppState state) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child: ListView.builder(
+                        itemCount: t1.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                          child: Text("$t1"));
+                        },
+                      ),
+                    );
+                  }),
+            )
           ],
         ));
   }

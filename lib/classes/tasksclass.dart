@@ -29,13 +29,7 @@ class _TodoState extends State<Todo> {
         width: double.infinity,
         height: 110,
         margin: EdgeInsets.only(bottom: 5, left: 3, right: 3),
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-              color: Colors.grey,
-              spreadRadius: 1,
-              blurRadius: 20,
-              offset: Offset(0, 1)),
-        ], borderRadius: BorderRadius.circular(20), color: Colors.white),
+        decoration: BoxDecoration( borderRadius: BorderRadius.circular(20), color: Colors.grey.withOpacity(0.2)),
         child: ListTile(
           leading: Icon(
             Icons.task,
