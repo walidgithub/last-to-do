@@ -1,58 +1,71 @@
+import 'dart:io';
+
 import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:todo_app/classes/tasksjson.dart';
 
-List<Map> t1 = [];
+class DatabaseHelper{
+  DatabaseHelper._privateConstructor();
+  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
-class DatabaseF {
-  static Database? database;
+  static Database? _database;
 
-  static Future<void> createDb() async {
-    database = await openDatabase(
-      'todo_app2',
+  Future<Database> get database async => _database ??= await _initDatabase();
+
+  Future<Database> _initDatabase() async {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, 'AllMyTasks.db');
+    return await openDatabase(
+      path,
       version: 1,
-      onCreate: (Database db, int version) async {
-        print('database created');
-        await db
-            .execute(
-            'CREATE TABLE ToDoTasks (id INTEGER PRIMARY KEY, task TEXT, time TEXT, date TEXT, status TEXT, priority TEXT)')
-            .catchError((error) => print("error${error.toString()}"));
-      },onOpen: (database) {
-      // getDb(database).then((value) => value = t1);
-    }
+      onCreate: _onCreate,
     );
   }
 
-  static Future insertDb(
-      {required String task,
-        required String time,
-        required String date,
-        required String status,
-        required String priority,}) async {
-    return await database?.transaction((txn) async {
-      txn
-          .rawInsert(
-          'INSERT INTO ToDoTasks(task, time, date, status, priority) VALUES("${task}", "${time}", "${date}", "${status}", "${priority}")')
-          .then((value) => print('insert successfuly'));
-      // getDb(database)
-      //     .then((value) => value = t1)
-      //     .catchError((error) => print("error${error.toString()}"));
-    });
+  Future _onCreate(Database db, int version) async {
+    await db.execute('''
+        CREATE TABLE mytasks(
+        id INTEGER PRIMARY KEY,
+        task TEXT,
+        time TEXT,
+        date TEXT,
+        status TEXT,
+        priority TEXT)
+        ''');
   }
 
-  static void gatAllData({
-    required String status,
-  }) async {
-    database?.rawUpdate('SELECT * FROM ToDoTasks where status= ?',['Task']);
-  }
-
-  // static Future<List<Map>> getDb(database) async {
-  //   return await database.rawQuery('SELECT * FROM ToDoTasks');
+  // Future<List<Tasks>> getTasks(String priority, String status) async {
+  //   Database db = await instance.database;
+  //   var tasks = await db.query('mytasks',where: "status = '$status' and priority = '$priority'", orderBy: 'date');
+  //   List<Tasks> tasksList = tasks.isNotEmpty ? tasks.map((c) => Tasks.fromMap(c)).toList() : [];
+  //   return tasksList;
   // }
 
-  // void updateData({
-  //   required String status,
-  //   required int id,
-  // }) async {
-  //   // database?.rawUpdate('update ToDoTasks set status=? where id=?',
-  //   //     ['$status', id]).then((value) => getDb(database));
+  Future<String> getPercentTasks() async {
+    Database db = await instance.database;
+    var task = await db.query('mytasks');
+    int counttask = task.length;
+    var done = await db.query('mytasks',where: "status = 'Done'");
+    int countdone = done.length;
+    double c = (countdone / counttask) * 100;
+
+    String percent = (c.round()).toString() + '%';
+    return percent;
+  }
+
+  Future <int> add(Tasks tasks) async {
+    Database db = await instance.database;
+    return await db.insert('mytasks', tasks.toMap());
+  }
+
+  // Future<int> remove(int id) async {
+  //   Database db= await instance.database;
+  //   return await db.delete('mytasks',where: 'id = ?', whereArgs: [id]);
+  // }
+  //
+  // Future<int> update(Tasks tasks) async {
+  //   Database db= await instance.database;
+  //   return await db.update('mytasks', tasks.toMap(), where: 'id = ?', whereArgs: [tasks.id]);
   // }
 }

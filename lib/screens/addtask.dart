@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/classes/addtaskimage.dart';
+import 'package:todo_app/backgrounds/addtaskimage.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/screens/taskshome.dart';
 import '../classes/databaseclass.dart';
+import '../classes/tasksjson.dart';
 import '../components/components.dart';
 
 class AddTask extends StatefulWidget {
@@ -15,7 +16,6 @@ class _AddTaskState extends State<AddTask> {
   var tasknameController = TextEditingController();
   var tasktimeController = TextEditingController();
   var taskdateController = TextEditingController();
-  // var taskstatusController = TextEditingController();
   var taskpriorityController = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
@@ -143,22 +143,18 @@ class _AddTaskState extends State<AddTask> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (formKey.currentState!.validate()) {
-                    DatabaseF.insertDb(
-                            task: tasknameController.text,
-                            time: tasktimeController.text,
-                            date: taskdateController.text,
-                            status: 'Task',
-                            priority: taskpriorityController.text);
-                        // .then(
-                        //     (value) => DatabaseF.getDb(DatabaseF.database).then((value) {
-                        //           t1 = value;
-                        //           Navigator.of(context).pushReplacement(
-                        //               MaterialPageRoute(
-                        //                   builder: (_) => TaskHome()));
-                        //         }));
+                    await DatabaseHelper.instance.add(Tasks(
+                      task: tasknameController.text,
+                      time: tasktimeController.text,
+                      date: taskdateController.text,
+                      status: 'Task',
+                      priority: taskpriorityController.text,
+                    ));
                   }
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => TaskHome(priority: taskpriorityController.text,)));
                 },
                 child: Icon(
                   Icons.save_outlined,

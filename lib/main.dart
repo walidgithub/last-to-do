@@ -5,6 +5,7 @@ import 'package:todo_app/screens/addtask.dart';
 
 import 'package:todo_app/classes/tasksclass.dart';
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

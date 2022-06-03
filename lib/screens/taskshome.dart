@@ -1,16 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:todo_app/classes/archivedimage.dart';
-import 'package:todo_app/classes/doneimage.dart';
-import 'package:todo_app/classes/taskimage.dart';
+import 'package:todo_app/backgrounds/archivedimage.dart';
+import 'package:todo_app/backgrounds/taskimage.dart';
 import 'dart:math' as math;
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:todo_app/screens/addtask.dart';
 
-import '../classes/databaseclass.dart';
+import '../backgrounds/doneimage.dart';
 
 class TaskHome extends StatefulWidget {
+  String priority;
+
+  TaskHome({required this.priority});
+
   @override
   _TaskHomeState createState() => _TaskHomeState();
 }
@@ -18,13 +20,7 @@ class TaskHome extends StatefulWidget {
 class _TaskHomeState extends State<TaskHome> {
   int activeTab = 0;
 
-  List<Widget> Screens = [TaskImage(), DoneImage(), ArchivedImage()];
-
-  void initState(){
-    super.initState();
-    DatabaseF.createDb();
-    // DatabaseF.gatAllData;
-  }
+  List<Widget> Screens = [TaskImage(''), DoneImage(''), ArchivedImage('')];
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +33,27 @@ class _TaskHomeState extends State<TaskHome> {
         floatingActionButton: getFloatingButton(),
         body: Center(
           child: ConditionalBuilder(
-            condition: t1.length >= 0,
-            builder: (context) => Screens[activeTab],
-            fallback: (context) => CircularProgressIndicator(),
+            condition: activeTab >= 0,
+            builder: (context) {
+              if (Screens[activeTab].toString() == 'TaskImage') {
+                return TaskImage(widget.priority);
+              } else if (Screens[activeTab].toString() == 'DoneImage') {
+                return DoneImage(widget.priority);
+              } else if (Screens[activeTab].toString() == 'ArchivedImage') {
+                return ArchivedImage(widget.priority);
+              } else {
+                return TaskImage(widget.priority);
+              }
+            },
+            fallback: (context) {
+              return Center(
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            },
           ),
         ),
       ),
