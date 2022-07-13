@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:todo_app/backgrounds/archivedimage.dart';
 import 'package:todo_app/backgrounds/taskimage.dart';
 import 'dart:math' as math;
@@ -88,7 +89,7 @@ class _TaskHomeState extends State<TaskHome> {
                   });
                 },
                 child: Icon(
-                  Icons.home_outlined,
+                  FontAwesomeIcons.home,
                   size: 30,
                   color: activeTab == 0 ? Colors.blue : Colors.black,
                 )),
@@ -102,7 +103,7 @@ class _TaskHomeState extends State<TaskHome> {
                 });
               },
               child: Icon(
-                Icons.check_box_outlined,
+                FontAwesomeIcons.checkDouble,
                 size: 30,
                 color: activeTab == 1 ? Colors.blue : Colors.black,
               ),
@@ -117,7 +118,7 @@ class _TaskHomeState extends State<TaskHome> {
                 });
               },
               child: Icon(
-                Icons.archive_outlined,
+                FontAwesomeIcons.archive,
                 size: 30,
                 color: activeTab == 2 ? Colors.blue : Colors.black,
               ),

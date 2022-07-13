@@ -6,6 +6,7 @@ import 'package:todo_app/screens/taskshome.dart';
 import '../classes/databaseclass.dart';
 import '../classes/tasksjson.dart';
 import '../components/components.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AddTask extends StatefulWidget {
   @override
@@ -17,6 +18,9 @@ class _AddTaskState extends State<AddTask> {
   var tasktimeController = TextEditingController();
   var taskdateController = TextEditingController();
   var taskpriorityController = TextEditingController();
+
+  // List<String> items = ['high', 'low', 'medium'];
+  // String? seleted = 'high';
 
   var formKey = GlobalKey<FormState>();
 
@@ -105,10 +109,10 @@ class _AddTaskState extends State<AddTask> {
                         TextForm(
                             controller: taskpriorityController,
                             type: TextInputType.text,
-                            label: 'Priority Name',
+                            label: 'Priority',
                             validate: (value) {
                               if (value.isEmpty) {
-                                return 'task priority must not be empty';
+                                return 'priority must not be empty';
                               } else {
                                 return null;
                               }
@@ -129,18 +133,19 @@ class _AddTaskState extends State<AddTask> {
     return Container(
       width: double.infinity,
       height: 90,
-      margin: EdgeInsets.only(bottom: 5, left: 3, right: 3),
+      margin: EdgeInsets.only(bottom: 15, left: 120, right: 120),
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
             color: Colors.grey,
             spreadRadius: 1,
-            blurRadius: 20,
+            blurRadius: 10,
             offset: Offset(0, 1)),
       ], borderRadius: BorderRadius.circular(20), color: Colors.white),
       child: Padding(
         padding: const EdgeInsets.only(left: 30, right: 30),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             GestureDetector(
                 onTap: () async {
@@ -153,13 +158,15 @@ class _AddTaskState extends State<AddTask> {
                       priority: taskpriorityController.text,
                     ));
                   }
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => TaskHome(priority: taskpriorityController.text,)));
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (_) => TaskHome(
+                            priority: taskpriorityController.text,
+                          )));
                 },
                 child: Icon(
-                  Icons.save_outlined,
-                  size: 40,
+                  FontAwesomeIcons.checkSquare,
                   color: Colors.blue,
+                  size: 50,
                 )),
           ],
         ),
